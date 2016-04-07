@@ -1,3 +1,4 @@
+#!/usr/bin/env python
 # 2016 (C) Valentin Lukyanets
 
 
