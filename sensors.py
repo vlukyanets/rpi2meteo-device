@@ -7,8 +7,17 @@ class Sensor(object):
         self.name = name
         self.reading_function = reading_function
 
+    def __normalize(self, reading):
+        if isinstance(reading, list):
+            return [self.__normalize(nested_reading) for nested_reading in reading]
+        elif isinstance(reading, float):
+            return round(reading, 2)
+        else:
+            return reading
+
     def __call__(self):
-        return self.reading_function()
+        data = self.reading_function()
+        return self.__normalize(data)
 
 
 class SensorsManager(object):

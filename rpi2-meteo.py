@@ -17,13 +17,12 @@ import libs.Adafruit_BME280
 
 
 def initialize_sensors_manager(sensors_manager):
-    fake_gps_sensor_read_coordinates = lambda: (50.00, 36.22)
     bme280 = libs.Adafruit_BME280.BME280()
 
     sensor_temperature = sensors.Sensor("Temperature", bme280.read_temperature)
     sensor_pressure = sensors.Sensor("Pressure", bme280.read_pressure)
     sensor_humidity = sensors.Sensor("Humidity", bme280.read_humidity)
-    sensor_gps = sensors.Sensor("Coordinates", fake_gps_sensor_read_coordinates)
+    sensor_gps = sensors.Sensor("Coordinates", lambda: [50.00, 36.22])  # Fake coordinates
 
     sensors_manager.add(sensor_temperature, "C")
     sensors_manager.add(sensor_pressure, "Pa")
