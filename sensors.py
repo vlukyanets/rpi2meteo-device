@@ -17,9 +17,9 @@ class SensorsManager(object):
         self.sensors = []
         self.dependencies = []
 
-    def add(self, sensor):
+    def add(self, sensor, unit=""):
         if sensor not in self.sensors:
-            self.sensors.append(sensor)
+            self.sensors.append((sensor, unit))
 
     def add_dependency(self, dependency):
         if dependency not in self.dependencies:

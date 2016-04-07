@@ -12,11 +12,11 @@ class HomeHandler(tornado.web.RequestHandler):
 
     def get(self):
         sensors_readings = {}
-        for sensor in self.sensors_manager.sensors:
+        for sensor, unit in self.sensors_manager.sensors:
             name, data = sensor.name, sensor()
-            sensors_readings[name] = data
+            sensors_readings[name] = (data, unit)
 
-        self.render("home.html", dict(sensors_readings=sensors_readings))
+        self.render("home.html", sensors_readings=sensors_readings)
 
 
 class Application(tornado.web.Application):

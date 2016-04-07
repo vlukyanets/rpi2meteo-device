@@ -25,8 +25,10 @@ def initialize_sensors_manager(sensors_manager):
     sensor_humidity = sensors.Sensor("Humidity", bme280.read_humidity)
     sensor_gps = sensors.Sensor("Coordinates", fake_gps_sensor_read_coordinates)
 
-    for sensor in [sensor_temperature, sensor_pressure, sensor_humidity, sensor_gps]:
-        sensors_manager.add(sensor)
+    sensors_manager.add(sensor_temperature, "C")
+    sensors_manager.add(sensor_pressure, "Pa")
+    sensors_manager.add(sensor_humidity, "%")
+    sensors_manager.add(sensor_gps)
     sensors_manager.add_dependency(bme280)
 
 
