@@ -39,15 +39,14 @@ def start_web_server(sensors_manager):
     )
     http_server.listen(tornado.options.options.port)
     tornado.ioloop.IOLoop.current().start()
-    return 0
 
 
 def main():
     sensors_manager = sensors.SensorsManager()
     initialize_sensors_manager(sensors_manager)
-
-    return start_web_server(sensors_manager)
+    start_web_server(sensors_manager)
 
 
 if __name__ == "__main__":
-    sys.exit(main())
+    main()
+    sys.exit()
