@@ -66,7 +66,7 @@ def schedule_send_data(aws_host, device_id, sensors_manager):
     @scheduler.scheduled_job('interval', minutes=5)
     def send_data():
         print "Retrieve sensor readings"
-        body = {"device_id": device_id, "sensors": []}
+        body = {"device_id": device_id, "sensors": [], "method": "data.put"}
         for sensor, unit in sensors_manager.sensors:
             body["sensors"].append((sensors.name, sensor.reading_function(), unit))
 
