@@ -32,7 +32,7 @@ def initialize_sensors_manager(sensors_manager):
 
 
 def start_web_server(sensors_manager):
-    tornado.options.define("port", 8888, help="Run on the given port", type=int)
+    tornado.options.define("port", 80, help="Run on the given port", type=int)
     tornado.options.parse_command_line()
     http_server = tornado.httpserver.HTTPServer(
         web_application.Application(sensors_manager)
