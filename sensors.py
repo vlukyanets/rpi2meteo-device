@@ -33,3 +33,21 @@ class SensorsManager(object):
     def add_dependency(self, dependency):
         if dependency not in self.dependencies:
             self.dependencies.append(dependency)
+
+
+COORDINATES_FILE_NAME = "gps-coordinates"
+
+
+# Function to read coordinates from file
+def read_coordinates():
+    with open(COORDINATES_FILE_NAME, "r") as f:
+        strnumbers = file.read().split()
+        values = map(float, strnumbers)
+        return values[0], values[1]
+
+
+latitude, longitude = read_coordinates()
+
+
+def get_coordinates():
+    return [latitude, longitude]
