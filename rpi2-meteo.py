@@ -11,10 +11,10 @@ import tornado.ioloop
 import tornado.web
 
 import httplib
-import urllib
 
 import web_application
 import sensors
+import json
 
 from apscheduler.schedulers.blocking import BlockingScheduler
 
@@ -31,7 +31,7 @@ def initialize_sensors_manager(sensors_manager):
     sensor_temperature = sensors.Sensor("Temperature", bme280.read_temperature)
     sensor_pressure = sensors.Sensor("Pressure", bme280.read_pressure)
     sensor_humidity = sensors.Sensor("Humidity", bme280.read_humidity)
-    sensor_gps = sensors.Sensor("Coordinates", sensors.get_coordinates)  # Fake coordinates
+    sensor_gps = sensors.Sensor("Coordinates", sensors.get_coordinates)
 
     sensors_manager.add(sensor_temperature, "C")
     sensors_manager.add(sensor_pressure, "Pa")
@@ -52,12 +52,12 @@ def start_web_server(sensors_manager):
 
 def get_device_id():
     with open(DEVICE_ID_FILENAME, "r") as f:
-        return f.readall()
+        return f.read()
 
 
 def get_aws_host():
     with open(AWS_HOST_FILENAME, "r") as f:
-        return f.readall()
+        return f.read()
 
 
 def schedule_send_data(aws_host, device_id, sensors_manager):
@@ -68,12 +68,12 @@ def schedule_send_data(aws_host, device_id, sensors_manager):
         print "Retrieve sensor readings"
         body = {"device_id": device_id, "sensors": [], "method": "data.put"}
         for sensor, unit in sensors_manager.sensors:
-            body["sensors"].append((sensors.name, sensor.reading_function(), unit))
+            body["sensors"].append((sensor.name, sensor.reading_function(), unit))
 
         print "Send data"
         connection = httplib.HTTPConnection(aws_host)
         headers = {"Content-Type": "application/json", "Accept": "text/plain"}
-        connection.request("POST", "/api", urllib.urlencode(body), headers)
+        connection.request("POST", "/api", json.dumps(body), headers)
         response = connection.getresponse()
         print response.status, response.reason
         connection.close()

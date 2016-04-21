@@ -41,7 +41,7 @@ COORDINATES_FILE_NAME = "gps-coordinates"
 # Function to read coordinates from file
 def read_coordinates():
     with open(COORDINATES_FILE_NAME, "r") as f:
-        strnumbers = file.read().split()
+        strnumbers = f.read().split()
         values = map(float, strnumbers)
         return values[0], values[1]
 
