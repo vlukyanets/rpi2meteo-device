@@ -68,7 +68,6 @@ def schedule_send_data(aws_host, device_id, sensors_manager):
     def send_data():
         body = {"device_id": device_id, "sensors": [], "method": "data.put"}
         for sensor, unit in sensors_manager.sensors:
-            print sensor.name
             body["sensors"].append((sensor.name, sensor.reading_function(), unit))
 
         connection = httplib.HTTPConnection(aws_host)
