@@ -63,7 +63,7 @@ def get_aws_host():
 def schedule_send_data(aws_host, device_id, sensors_manager):
     scheduler = BlockingScheduler()
 
-    @scheduler.scheduled_job('interval', minutes=5)
+    @scheduler.scheduled_job('interval', seconds=10)
     def send_data():
         print "Retrieve sensor readings"
         body = {"device_id": device_id, "sensors": [], "method": "data.put"}
