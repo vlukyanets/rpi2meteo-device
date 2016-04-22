@@ -10,6 +10,7 @@ import tornado.httpserver
 import tornado.ioloop
 import tornado.web
 
+import datetime
 import httplib
 
 import web_application
@@ -65,16 +66,18 @@ def schedule_send_data(aws_host, device_id, sensors_manager):
 
     @scheduler.scheduled_job('interval', seconds=10)
     def send_data():
-        print "Retrieve sensor readings"
         body = {"device_id": device_id, "sensors": [], "method": "data.put"}
         for sensor, unit in sensors_manager.sensors:
+            print sensor.name
             body["sensors"].append((sensor.name, sensor.reading_function(), unit))
 
-        print "Send data"
         connection = httplib.HTTPConnection(aws_host)
         headers = {"Content-Type": "application/json", "Accept": "text/plain"}
         connection.request("POST", "/api", json.dumps(body), headers)
         response = connection.getresponse()
+        with open("/tmp/rpi2meteo-log", "w+") as f:
+            log_str = str() + str(response.status) + " " + str(response.reason) + "\n"
+            f.write(log_str)
         print response.status, response.reason
         connection.close()
 
