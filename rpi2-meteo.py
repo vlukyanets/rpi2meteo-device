@@ -74,7 +74,7 @@ def schedule_send_data(aws_host, device_id, sensors_manager):
         headers = {"Content-Type": "application/json", "Accept": "text/plain"}
         connection.request("POST", "/api", json.dumps(body), headers)
         response = connection.getresponse()
-        with open("/tmp/rpi2meteo-log", "w+") as f:
+        with open("/tmp/rpi2meteo-log", "a+") as f:
             log_str = str() + str(response.status) + " " + str(response.reason) + "\n"
             f.write(log_str)
         print response.status, response.reason
