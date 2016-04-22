@@ -10,7 +10,7 @@ import tornado.httpserver
 import tornado.ioloop
 import tornado.web
 
-import datetime
+from datetime import datetime
 import httplib
 
 import web_application
@@ -75,7 +75,7 @@ def schedule_send_data(aws_host, device_id, sensors_manager):
         connection.request("POST", "/api", json.dumps(body), headers)
         response = connection.getresponse()
         with open("/tmp/rpi2meteo-log", "a+") as f:
-            log_str = str() + str(response.status) + " " + str(response.reason) + "\n"
+            log_str = datetime.utcnow().strftime("%Y-%m-%d %H:%M:%S") + str(response.status) + " " + str(response.reason) + "\n"
             f.write(log_str)
         print response.status, response.reason
         connection.close()
