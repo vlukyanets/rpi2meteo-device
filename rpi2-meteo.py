@@ -32,7 +32,7 @@ def initialize_sensors_manager(sensors_manager):
     sensor_temperature = sensors.Sensor("Temperature", bme280.read_temperature)
     sensor_pressure = sensors.Sensor("Pressure", bme280.read_pressure)
     sensor_humidity = sensors.Sensor("Humidity", bme280.read_humidity)
-    sensor_gps = sensors.Sensor("Coordinates", sensors.get_coordinates)
+    sensor_gps = sensors.Sensor("Geolocation", sensors.get_coordinates)
 
     sensors_manager.add(sensor_temperature, "C")
     sensors_manager.add(sensor_pressure, "Pa")
@@ -64,11 +64,11 @@ def get_aws_host():
 def schedule_send_data(aws_host, device_id, sensors_manager):
     scheduler = BlockingScheduler()
 
-    @scheduler.scheduled_job('interval', seconds=10)
+    @scheduler.scheduled_job('interval', minutes=3)
     def send_data():
-        body = {"device_id": device_id, "sensors": [], "method": "data.put"}
+        body = {"device_id": device_id, "sensors": {}, "method": "data.put"}
         for sensor, unit in sensors_manager.sensors:
-            body["sensors"].append((sensor.name, sensor.reading_function(), unit))
+            body["sensors"][sensor.name] = [sensor.reading_function(), unit]
 
         connection = httplib.HTTPConnection(aws_host)
         headers = {"Content-Type": "application/json", "Accept": "text/plain"}
