@@ -64,15 +64,17 @@ def get_aws_host():
 def schedule_send_data(aws_host, device_id, sensors_manager):
     scheduler = BlockingScheduler()
 
-    @scheduler.scheduled_job('interval', minutes=3)
+    @scheduler.scheduled_job('interval', minutes=1)
     def send_data():
         body = {"device_id": device_id, "sensors": {}, "method": "data.put"}
         for sensor, unit in sensors_manager.sensors:
             body["sensors"][sensor.name] = [sensor.reading_function(), unit]
 
         connection = httplib.HTTPConnection(aws_host)
-        headers = {"Content-Type": "application/json", "Accept": "text/plain"}
-        connection.request("POST", "/api", json.dumps(body), headers)
+        headers = {"Content-Type": "application/jsoni", "Accept": "text/plain"}
+        dumped_json = json.dumps(body)
+        print dumped_json
+        connection.request("POST", "/api", dumped_json, headers)
         response = connection.getresponse()
         with open("/tmp/rpi2meteo-log", "a+") as f:
             log_str = datetime.utcnow().strftime("%Y-%m-%d %H:%M:%S") + str(response.status) + " " + str(response.reason) + "\n"

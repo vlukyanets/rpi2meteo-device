@@ -50,4 +50,4 @@ latitude, longitude = read_coordinates()
 
 
 def get_coordinates():
-    return [latitude, longitude]
+    return {"lat": latitude, "lng": longitude}
