@@ -71,7 +71,7 @@ def schedule_send_data(aws_host, device_id, sensors_manager):
             body["sensors"][sensor.name] = [sensor.reading_function(), unit]
 
         connection = httplib.HTTPConnection(aws_host)
-        headers = {"Content-Type": "application/jsoni", "Accept": "text/plain"}
+        headers = {"Content-Type": "application/json", "Accept": "text/plain"}
         dumped_json = json.dumps(body)
         print dumped_json
         connection.request("POST", "/api", dumped_json, headers)
